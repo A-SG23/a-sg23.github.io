@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aditi Gargeshwari</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --olive: #6B7A3F;
+    --olive-light: #8A9A54;
+    --tan: #C9B99A;
+    --tan-light: #E8DDD0;
+    --navy: #1C2B3A;
+    --grey: #8C8C8C;
+    --grey-light: #F0EDE8;
+    --mauve: #9B8589;
+    --cream: #FAF8F5;
+    --dark: #1A1A18;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--olive);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--olive);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.4s ease, width 0.3s, height 0.3s, border-color 0.3s;
+    transform: translate(-50%, -50%);
+  }
+  body:has(a:hover) .cursor-ring,
+  body:has(button:hover) .cursor-ring {
+    width: 56px; height: 56px;
+    border-color: var(--mauve);
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 60px;
+    background: var(--cream);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  nav.scrolled {
+    border-bottom-color: var(--tan);
+    background: rgba(250,248,245,0.96);
+    backdrop-filter: blur(10px);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    color: var(--dark);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--olive); }
+  .nav-links {
+    display: flex; gap: 44px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--grey);
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: var(--olive);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--dark); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 100px;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 60px 80px 60px;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--olive);
+    margin-bottom: 32px;
+  }
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(56px, 6vw, 88px);
+    font-weight: 300;
+    line-height: 1.0;
+    color: var(--dark);
+    margin-bottom: 28px;
+  }
+  .hero-name em {
+    font-style: italic;
+    color: var(--olive);
+  }
+  .hero-desc {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--grey);
+    max-width: 380px;
+    margin-bottom: 52px;
+    font-weight: 300;
+  }
+  .hero-tags {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    border: 1px solid var(--tan);
+    color: var(--grey);
+    border-radius: 0;
+    transition: all 0.2s;
+  }
+  .tag:hover { background: var(--tan-light); color: var(--dark); }
+
+  .hero-right {
+    background: var(--grey-light);
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: flex-end; justify-content: flex-start;
+    padding: 60px;
+  }
+  .hero-accent-block {
+    position: absolute;
+    top: 0; right: 0;
+    width: 60%; height: 65%;
+    background: var(--olive);
+    opacity: 0.08;
+  }
+  .hero-accent-block-2 {
+    position: absolute;
+    bottom: 80px; right: 80px;
+    width: 180px; height: 180px;
+    border: 1px solid var(--tan);
+  }
+  .hero-stats {
+    display: flex; gap: 48px;
+    position: relative; z-index: 2;
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-top: 6px;
+  }
+  .hero-decoration {
+    position: absolute;
+    top: 40px; left: 40px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--tan);
+    writing-mode: vertical-rl;
+  }
+
+  /* MARQUEE */
+  .marquee-strip {
+    background: var(--navy);
+    padding: 16px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-inner {
+    display: inline-flex; gap: 48px;
+    animation: marquee 20s linear infinite;
+  }
+  .marquee-inner span {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--tan-light);
+    opacity: 0.7;
+  }
+  .marquee-inner .dot {
+    color: var(--olive-light);
+    opacity: 1;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* PROJECTS SECTION */
+  .projects-section {
+    padding: 100px 0;
+  }
+  .section-header {
+    padding: 0 60px 60px;
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    color: var(--dark);
+  }
+  .section-title em { font-style: italic; color: var(--olive); }
+  .section-count {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+
+  /* HORIZONTAL SCROLL */
+  .h-scroll-wrapper {
+    position: relative;
+    overflow: hidden;
+  }
+  .h-scroll-track {
+    display: flex;
+    gap: 24px;
+    padding: 0 60px 40px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    cursor: grab;
+  }
+  .h-scroll-track:active { cursor: grabbing; }
+  .h-scroll-track::-webkit-scrollbar { display: none; }
+
+  .project-card {
+    flex: 0 0 360px;
+    height: 480px;
+    position: relative;
+    overflow: hidden;
+    background: var(--grey-light);
+    transition: transform 0.4s ease;
+  }
+  .project-card:hover { transform: translateY(-6px); }
+  .project-card:nth-child(even) { margin-top: 40px; }
+  .project-card:nth-child(3n) { background: var(--tan-light); }
+  .project-card:nth-child(1) .card-accent { background: var(--olive); }
+  .project-card:nth-child(2) .card-accent { background: var(--navy); }
+  .project-card:nth-child(3) .card-accent { background: var(--mauve); }
+  .project-card:nth-child(4) .card-accent { background: var(--tan); }
+  .project-card:nth-child(5) .card-accent { background: var(--olive-light); }
+
+  .card-accent {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 6px;
+  }
+  .card-number {
+    position: absolute;
+    top: 28px; right: 28px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px;
+    font-weight: 300;
+    color: var(--dark);
+    opacity: 0.08;
+    line-height: 1;
+  }
+  .card-body {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 36px;
+    background: linear-gradient(to top, rgba(26,26,24,0.9) 0%, transparent 100%);
+    color: black; /* CHANGED THIS FROM WHITE TO BLACK  ------------- */
+    transform: translateY(60px);
+    transition: transform 0.4s ease;
+  }
+  .project-card:hover .card-body { transform: translateY(0); }
+  .card-category {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--black);
+    margin-bottom: 10px;
+    opacity: 0.8;
+  }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 400;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .card-desc {
+    font-size: 13px;
+    line-height: 1.6;
+    opacity: 0.75;
+    font-weight: 300;
+  }
+  .card-icon {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    opacity: 0.15;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .project-card:hover .card-icon {
+    opacity: 0.06;
+    transform: translate(-50%, -60%) scale(1.1);
+  }
+
+  /* Scroll controls */
+  .scroll-controls {
+    display: flex; gap: 12px;
+    padding: 0 60px 20px;
+    justify-content: flex-end;
+  }
+  .scroll-btn {
+    width: 48px; height: 48px;
+    border: 1px solid var(--tan);
+    background: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    color: var(--dark);
+    font-size: 18px;
+  }
+  .scroll-btn:hover {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: white;
+  }
+
+  /* ABOUT TEASER */
+  .about-teaser {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    border-top: 1px solid var(--tan-light);
+    border-bottom: 1px solid var(--tan-light);
+    margin: 60px 0;
+  }
+  .about-left {
+    background: var(--navy);
+    padding: 80px 60px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .about-label {
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--tan);
+  }
+  .about-cta {
+    display: inline-flex; align-items: center; gap: 14px;
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 40px;
+    transition: gap 0.2s;
+  }
+  .about-cta:hover { gap: 22px; }
+  .about-cta-arrow {
+    width: 36px; height: 1px;
+    background: var(--tan);
+    position: relative;
+  }
+  .about-right {
+    padding: 80px 80px;
+    background: var(--grey-light);
+  }
+  .about-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 3vw, 46px);
+    font-weight: 300;
+    line-height: 1.3;
+    color: var(--dark);
+    margin-bottom: 32px;
+  }
+  .about-quote em { font-style: italic; color: var(--mauve); }
+  .about-details {
+    display: flex; gap: 40px;
+  }
+  .about-detail {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .about-detail strong {
+    display: block;
+    font-weight: 400;
+    color: var(--dark);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-top: 4px;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid var(--tan-light);
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--dark);
+  }
+  .footer-logo span { color: var(--olive); }
+  .footer-links {
+    display: flex; gap: 32px; list-style: none;
+  }
+  .footer-links a {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--grey);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--olive); }
+  .footer-copy {
+    font-size: 12px;
+    color: var(--tan);
+  }
+
+  /* ANIMATIONS */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav id="nav">
+  <a href="#" class="nav-logo"><span></span></a>
+  <ul class="nav-links">
+    <li><a href="#projects">Portfolio</a></li>
+    <!-- <li><a href="#">About</a></li>
+    <li><a href="#">Résumé</a></li> --> 
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left fade-in">
+    <p class="hero-eyebrow">Computer Science & Mathematics — Harvey Mudd College</p>
+    <h1 class="hero-name">Aditi<br><em>Gargeshwari</em></h1>
+    <p class="hero-desc">I build things at the intersection of AI, systems, and people — from research labs to hackathons, shipping ideas that matter.</p>
+    <div class="hero-tags">
+      <span class="tag">Agentic AI</span>
+      <span class="tag">Product Development</span>
+      <span class="tag">HCI</span>
+    </div> 
+  </div>
+  <div class="hero-right">
+    <div class="hero-decoration"> <!-- Portfolio — 2026 --> </div>
+    <div class="hero-accent-block"></div>
+    <div class="hero-accent-block-2"></div>
+    <!--  <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">1st</div>
+        <div class="stat-label">CGU Hacks</div>
+      </div>
+       <div class="stat-item">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Projects</div>
+      </div> 
+      <div class="stat-item">
+        <div class="stat-num">2</div>
+        <div class="stat-label">Labs</div>
+      </div>
+    </div>  -->
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span>Human-Computer Interaction</span><span class="dot">✦</span>
+    <span>Agentic Systems</span><span class="dot">✦</span>
+    <span>Machine Learning</span><span class="dot">✦</span>
+    <span>Product Development</span><span class="dot">✦</span>
+    <span>Business Analytics</span><span class="dot">✦</span>
+    <span>Mathematics</span><span class="dot">✦</span>
+
+    <span>Human-Computer Interaction</span><span class="dot">✦</span>
+    <span>Agentic Systems</span><span class="dot">✦</span>
+    <span>Machine Learning</span><span class="dot">✦</span>
+    <span>Product Development</span><span class="dot">✦</span>
+    <span>Business Analytics</span><span class="dot">✦</span>
+    <span>Mathematics</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section class="projects-section" id="projects">
+  <div class="section-header fade-in">
+    <h2 class="section-title">Selected<br><em>Work</em></h2>
+    <span class="section-count"><!-- 05 Projects --> </span>
+  </div>
+
+  <div class="scroll-controls">
+    <button class="scroll-btn" id="scrollLeft">←</button>
+    <button class="scroll-btn" id="scrollRight">→</button>
+  </div>
+
+  <div class="h-scroll-wrapper">
+    <div class="h-scroll-track" id="scrollTrack">
+
+      <div class="project-card">
+        <div class="card-accent"></div>
+        <div class="card-number"></div>
+        <div class="card-icon">🏆</div>
+        <div class="card-body">
+          <div class="card-category">Mobile App</div>
+          <div class="card-title">SafeNest (1st @ CGU Hacks) </div>
+          <div class="card-desc">AI agent app for expectant mothers. Built with MindStudio, React.js, and Gemini. Won CGU Hacks 2025.</div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-accent"></div>
+        <div class="card-number"></div>
+        <div class="card-icon">🛒</div>
+        <div class="card-body">
+          <div class="card-category">Automation · Agentic</div>
+          <div class="card-title">Wayfair Workflows</div>
+          <div class="card-desc">n8n agentic e-commerce automation: competitor monitoring, home-goods trend analysis, and executive dashboard with business actions.</div>
+        </div>
+      </div>
+
+
+      <div class="project-card">
+        <div class="card-accent"></div>
+        <div class="card-number"></div>
+        <div class="card-icon">🔬</div>
+        <div class="card-body">
+          <div class="card-category">Fine-tuning · Frontend</div>
+          <div class="card-title">p-SciBowl</div>
+          <div class="card-desc">Science Bowl practice platform with Flan-T5 fine-tuned via LoRA. React frontend with NSB-style interface.</div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-accent"></div>
+        <div class="card-number"></div>
+        <div class="card-icon">📊</div>
+        <div class="card-body">
+          <div class="card-category">Epidemiology · Applied Math</div>
+          <div class="card-title">SIR Model (Prototype)</div>
+          <div class="card-desc">Interactive epidemiological model presented to HMC faculty. Built as a supplementary learning tool for visualizing disease models.</div>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="card-accent"></div>
+        <div class="card-number"></div>
+        <div class="card-icon">🌐</div>
+        <div class="card-body">
+          <div class="card-category">Browser Extension · AI</div>
+          <div class="card-title">Confidence Compass (Prototype)</div>
+          <div class="card-desc">Tracks AI vs. independent problem-solving patterns in real time. IPAI Lab fellowship project.</div>
+        </div>
+      </div>
+
+     
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT TEASER -->
+<div class="about-teaser fade-in">
+  <div class="about-left">
+    <div class="about-label"><!-- About Me --> </div>
+    <a href="#" class="about-cta">
+      Learn more
+      <span class="about-cta-arrow"></span>
+    </a>
+  </div>
+  <div class="about-right">
+    <p class="about-quote">Building at the edge of what AI<br>can <em>actually</em> do for people.</p>
+    <div class="about-details">
+      <div class="about-detail">
+        Currently at
+        <strong>IPAI Lab, Harvey Mudd</strong>
+      </div>
+      <div class="about-detail">
+        Upcoming
+        <strong>President @ P-ai at the Claremont Colleges</strong>
+      </div>
+      <div class="about-detail">
+        Based in
+        <strong>Claremont, CA</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo"><span></span></div>
+  <ul class="footer-links">
+    <!-- <li><a href="#">GitHub</a></li>
+    <li><a href="#">LinkedIn</a></li>
+    <li><a href="#">Email</a></li> --> 
+  </ul>
+  <div class="footer-copy">© 2026 Aditi Gargeshwari</div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top = e.clientY + 'px';
+    }, 80);
+  });
+
+  // Nav scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Fade in
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Horizontal scroll buttons
+  const track = document.getElementById('scrollTrack');
+  document.getElementById('scrollLeft').addEventListener('click', () => {
+    track.scrollBy({ left: -400, behavior: 'smooth' });
+  });
+  document.getElementById('scrollRight').addEventListener('click', () => {
+    track.scrollBy({ left: 400, behavior: 'smooth' });
+  });
+
+  // Drag scroll
+  let isDown = false, startX, scrollLeft;
+  track.addEventListener('mousedown', e => {
+    isDown = true;
+    startX = e.pageX - track.offsetLeft;
+    scrollLeft = track.scrollLeft;
+  });
+  track.addEventListener('mouseleave', () => isDown = false);
+  track.addEventListener('mouseup', () => isDown = false);
+  track.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - track.offsetLeft;
+    track.scrollLeft = scrollLeft - (x - startX) * 1.5;
+  });
+</script>
+</body>
+</html>
