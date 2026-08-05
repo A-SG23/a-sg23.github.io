@@ -339,3 +339,121 @@ if os.path.exists(os.path.join(OUT, "me.png")):
     print("  me.png  exists, left alone")
 else:
     write_png("me.png", me, scale=6)
+
+# ---------------------------------------------------------------- project art
+print("project art")
+
+CVBG  = (0xED, 0xF1, 0xE2, 255)   # matches --field
+CVBG2 = (0xE1, 0xE8, 0xD3, 255)
+WHITE = (0xF8, 0xFA, 0xF2, 255)
+SKINC = (0xE9, 0xC3, 0xA0, 255)
+CHEEK = (0xE8, 0x9B, 0xA8, 255)
+NEST  = (0xC0, 0x9A, 0x66, 255)
+NESTD = (0x94, 0x72, 0x48, 255)
+BROW  = (0x5A, 0x46, 0x36, 255)
+
+def blank_img(w, h, bg):
+    return [[bg for _ in range(w)] for _ in range(h)]
+
+def box(px, x0, y0, x1, y1, c):
+    for y in range(max(0, y0), min(len(px), y1 + 1)):
+        for x in range(max(0, x0), min(len(px[0]), x1 + 1)):
+            px[y][x] = c
+
+def disc(px, cx, cy, rx, ry, c, over=None):
+    for y in range(len(px)):
+        for x in range(len(px[0])):
+            if ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1:
+                if over is None or px[y][x] == over:
+                    px[y][x] = c
+
+def dither(px, c, mod=9):
+    for y in range(len(px)):
+        for x in range(len(px[0])):
+            if (x * 5 + y * 11) % mod == 0:
+                px[y][x] = c
+
+def sparkle(px, x, y, c):
+    for dx, dy in ((0, 0), (1, 0), (-1, 0), (0, 1), (0, -1)):
+        px[y + dy][x + dx] = c
+
+# ---- 16x16 icons --------------------------------------------------------
+sh = blank_img(16, 16, T)                       # t-shirt
+box(sh, 1, 3, 14, 8, DK); box(sh, 4, 3, 11, 14, DK)
+box(sh, 2, 4, 13, 7, MD); box(sh, 5, 4, 10, 13, MD)
+box(sh, 6, 3, 9, 5, DK);  box(sh, 6, 3, 9, 4, T)
+write_png("icon-shirt.png", sh, scale=1)
+
+bb = blank_img(16, 16, T)                       # baby
+disc(bb, 7.5, 9, 6.2, 6.2, DK)
+disc(bb, 7.5, 9, 5.2, 5.2, SKINC)
+box(bb, 7, 1, 8, 3, DK); bb[2][9] = DK
+bb[8][5] = bb[8][10] = DK                       # eyes
+bb[11][4] = bb[11][11] = CHEEK                  # cheeks
+bb[12][7] = bb[12][8] = DK                      # mouth
+write_png("icon-baby.png", bb, scale=1)
+
+ey = blank_img(16, 16, T)                       # winged eye
+for x in range(2, 14):
+    t = (x - 8) / 6.0
+    top, bot = round(8 - 4.5 * (1 - t * t)), round(8 + 4.0 * (1 - t * t))
+    for y in range(top, bot + 1):
+        ey[y][x] = WHITE
+    ey[top][x] = ey[bot][x] = DK
+disc(ey, 8, 8, 3.2, 3.4, MD, over=WHITE)
+disc(ey, 8, 8, 1.6, 1.7, DK, over=MD)
+for x, y in ((12, 6), (13, 6), (14, 5), (14, 6), (15, 5)):
+    ey[y][x] = DK                               # wing flick
+write_png("icon-eye.png", ey, scale=1)
+
+# ---- 81x54 covers (3:2, written at 4x) ----------------------------------
+CW, CH = 81, 54
+
+# minus. — a small tee, centred
+cm = blank_img(CW, CH, CVBG); dither(cm, CVBG2)
+box(cm, 23, 14, 57, 25, DK); box(cm, 24, 15, 56, 24, MD)
+box(cm, 28, 14, 52, 41, DK); box(cm, 29, 15, 51, 40, MD)
+disc(cm, 40, 14, 5, 3, DK); disc(cm, 40, 13, 4, 2.4, CVBG)
+box(cm, 34, 26, 46, 29, DK)                      # the "minus"
+for x in range(31, 50, 4):
+    cm[38][x] = DK; cm[38][x + 1] = DK           # hem stitching
+write_png("cover-minus.png", cm, scale=4)
+
+# safenest — a small swaddled bundle
+cs = blank_img(CW, CH, CVBG); dither(cs, CVBG2)
+for x, y in ((14, 12), (66, 15), (18, 40), (63, 41)):
+    sparkle(cs, x, y, LT)
+disc(cs, 40, 40, 15, 13, DK); disc(cs, 40, 40, 14, 12, MD)
+for k in range(9):                               # swaddle wrap
+    cs[30 + k][40 - k] = DK; cs[30 + k][40 + k] = DK
+disc(cs, 40, 20, 9.5, 9.5, DK); disc(cs, 40, 20, 8.5, 8.5, SKINC)
+for x, y in ((39, 10), (40, 9), (41, 9), (42, 10), (42, 11)):
+    cs[y][x] = BROW                              # curl
+cs[19][36] = cs[19][37] = cs[19][43] = cs[19][44] = DK
+disc(cs, 34, 23, 2.6, 1.8, CHEEK); disc(cs, 46, 23, 2.6, 1.8, CHEEK)
+cs[24][38] = cs[24][42] = DK
+for x in range(39, 42): cs[25][x] = DK
+write_png("cover-safenest.png", cs, scale=4)
+
+# aEye — a smaller eye with a flatter flick, no brow
+ce = blank_img(CW, CH, CVBG); dither(ce, CVBG2)
+lid = {}
+for x in range(18, 63):
+    k = 1 - ((x - 40) / 22.0) ** 2
+    top, bot = round(27 - 12 * k), round(27 + 10 * k)
+    lid[x] = top
+    for y in range(top, bot + 1):
+        ce[y][x] = WHITE
+    ce[bot][x] = DK
+disc(ce, 40, 26, 7.5, 7.5, MD, over=WHITE)
+disc(ce, 40, 26, 3.8, 3.8, DK, over=MD)
+ce[23][37] = ce[22][38] = WHITE                  # catchlight
+for x, top in lid.items():
+    for d in range(2 + round(2 * max(0.0, (x - 40) / 22.0))):
+        if top - d >= 0: ce[top - d][x] = DK
+for x in range(58, 77):                          # flatter wing
+    p = (x - 58) / 18.0
+    yt = round(22 - 7 * p)
+    for y in range(yt, yt + max(1, round(5 - 4 * p)) + 1):
+        if 0 <= y < CH: ce[y][x] = DK
+write_png("cover-aeye.png", ce, scale=4)
