@@ -52,29 +52,28 @@
     <div class="win__body">
       <div class="page-intro">
         <h1>portfolio</h1>
-        <p>case studies for each project: the problem, what i built, and what came out of it.</p>
+        <p>what i've built, what it's for, and where it stands.</p>
       </div>
+    </div>
 
-      <div class="notice">
-        <img src="assets/img/icon-folder.png" alt="" width="32" height="32">
-        <div>
-          <h2>full case studies are on the way.</h2>
-          <p>structure still to be decided — the three projects on the home page will expand into write-ups here.</p>
-          <a class="btn" href="index.html#work">see recent work</a>
-        </div>
-      </div>
+    <div class="win__body--mdi">
+      <div class="work-grid" id="projectGrid"></div>
+      <noscript>
+        <p class="noscript-note">this grid needs javascript. the same projects are
+        listed on my <a href="resume.html">resume</a>.</p>
+      </noscript>
     </div>
 
     <div class="win__status">
       <span class="win__cell win__cell--grow">portfolio</span>
-      <span class="win__cell">3 items</span>
+      <span class="win__cell" data-project-count>&hellip;</span>
     </div>
   </section>
 
   <!-- ============================================================
        PROJECT CONTENT PARKED HERE so it isn't lost — these two were
        on the old home page but didn't make the featured three.
-       Reuse the .card markup from index.html when this page is built.
+       Add them as objects in assets/js/projects.js when they are ready.
 
        p-SciBowl — fine-tuning · frontend
        Science Bowl practice platform with Flan-T5 fine-tuned via LoRA.
@@ -139,6 +138,7 @@
   </div>
 </footer>
 
+<script src="assets/js/projects.js"></script>
 <script src="assets/js/site.js"></script>
 </body>
 </html>
