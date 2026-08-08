@@ -555,9 +555,6 @@ a.card:active { transform: translate(1px, 1px); }
   .card__body > .card__desc { display: none; }
 }
 
-.noscript-note { font-size: 14px; color: var(--ink2); }
-.noscript-note a { color: var(--ink); }
-
 /* ==========================================================================
    ABOUT PAGE
    ========================================================================== */
